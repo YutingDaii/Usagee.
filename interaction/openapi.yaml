@@ -1,0 +1,346 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /helloworld/{name}:
+        get:
+            tags:
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /interaction/user/{userId}/favorites:
+        get:
+            tags:
+                - InteractionService
+            description: ListFavorites handles listing a user's favorite videos.
+            operationId: InteractionService_ListFavorites
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: pageNum
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.ListFavoritesReply'
+    /interaction/video/comment:
+        post:
+            tags:
+                - InteractionService
+            description: PostComment handles posting a comment on a video or replying to a comment.
+            operationId: InteractionService_PostComment
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/interaction.PostCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.PostCommentReply'
+    /interaction/video/favorite:
+        post:
+            tags:
+                - InteractionService
+            description: FavoriteVideo handles adding a video to favorites.
+            operationId: InteractionService_FavoriteVideo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/interaction.FavoriteVideoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.FavoriteVideoReply'
+    /interaction/video/like:
+        post:
+            tags:
+                - InteractionService
+            description: LikeVideo handles liking a video.
+            operationId: InteractionService_LikeVideo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/interaction.LikeVideoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.LikeVideoReply'
+    /interaction/video/unfavorite:
+        post:
+            tags:
+                - InteractionService
+            description: UnfavoriteVideo handles removing a video from favorites.
+            operationId: InteractionService_UnfavoriteVideo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/interaction.UnfavoriteVideoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.UnfavoriteVideoReply'
+    /interaction/video/unlike:
+        post:
+            tags:
+                - InteractionService
+            description: UnlikeVideo handles unliking a video.
+            operationId: InteractionService_UnlikeVideo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/interaction.UnlikeVideoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.UnlikeVideoReply'
+    /interaction/video/{videoId}/comments:
+        get:
+            tags:
+                - InteractionService
+            description: ListComments handles listing comments for a video.
+            operationId: InteractionService_ListComments
+            parameters:
+                - name: videoId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: pageNum
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: rootCommentId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.ListCommentsReply'
+    /interaction/video/{videoId}/like_count:
+        get:
+            tags:
+                - InteractionService
+            description: GetVideoLikeCount handles getting the like count for a video.
+            operationId: InteractionService_GetVideoLikeCount
+            parameters:
+                - name: videoId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/interaction.GetVideoLikeCountReply'
+components:
+    schemas:
+        helloworld.v1.HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+        interaction.CommentItem:
+            type: object
+            properties:
+                commentId:
+                    type: string
+                videoId:
+                    type: string
+                userId:
+                    type: string
+                content:
+                    type: string
+                parentId:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                path:
+                    type: string
+                replies:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/interaction.CommentItem'
+            description: CommentItem structure based on domain model
+        interaction.FavoriteItem:
+            type: object
+            properties:
+                userId:
+                    type: string
+                videoId:
+                    type: string
+                favoritedAt:
+                    type: string
+                    format: date-time
+            description: FavoriteItem structure based on domain model
+        interaction.FavoriteVideoReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        interaction.FavoriteVideoRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                videoId:
+                    type: string
+            description: Requests and Replies for Favorites
+        interaction.GetVideoLikeCountReply:
+            type: object
+            properties:
+                likeCount:
+                    type: string
+        interaction.LikeVideoReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        interaction.LikeVideoRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                videoId:
+                    type: string
+            description: Requests and Replies for Like/Unlike
+        interaction.ListCommentsReply:
+            type: object
+            properties:
+                comments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/interaction.CommentItem'
+                totalPages:
+                    type: integer
+                    format: int32
+                totalComments:
+                    type: string
+        interaction.ListFavoritesReply:
+            type: object
+            properties:
+                favorites:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/interaction.FavoriteItem'
+                totalPages:
+                    type: integer
+                    format: int32
+                totalFavorites:
+                    type: string
+        interaction.PostCommentReply:
+            type: object
+            properties:
+                comment:
+                    $ref: '#/components/schemas/interaction.CommentItem'
+        interaction.PostCommentRequest:
+            type: object
+            properties:
+                videoId:
+                    type: string
+                userId:
+                    type: string
+                content:
+                    type: string
+                parentId:
+                    type: string
+            description: Requests and Replies for Comments
+        interaction.UnfavoriteVideoReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        interaction.UnfavoriteVideoRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                videoId:
+                    type: string
+        interaction.UnlikeVideoReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        interaction.UnlikeVideoRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                videoId:
+                    type: string
+tags:
+    - name: Greeter
+      description: The greeting service definition.
+    - name: InteractionService
+      description: Interaction Service definition

@@ -1,0 +1,432 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: User API
+    version: 0.0.1
+paths:
+    /api/users/login:
+        post:
+            tags:
+                - User
+            description: Login
+            operationId: User_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/register:
+        post:
+            tags:
+                - User
+            description: Register
+            operationId: User_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegisterUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/send_verification_code:
+        post:
+            tags:
+                - User
+            description: Send verification code
+            operationId: User_SendVerificationCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SendVerificationCodeReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SendVerificationCodeReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/verify_code:
+        post:
+            tags:
+                - User
+            description: Verify code
+            operationId: User_VerifyCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/VerifyCodeReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/VerifyCodeReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/del:
+        post:
+            tags:
+                - User
+            operationId: User_DeleteUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/edit:
+        post:
+            tags:
+                - User
+            operationId: User_UpdateUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/follow:
+        post:
+            tags:
+                - User
+            operationId: User_FollowUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/FollowUserReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FollowUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/followers:
+        get:
+            tags:
+                - User
+            operationId: User_ListFollowers
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListFollowersReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/following:
+        get:
+            tags:
+                - User
+            operationId: User_ListFollowing
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListFollowingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/users/{id}/profile:
+        get:
+            tags:
+                - User
+            operationId: User_GetUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        DeleteUserReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        DeleteUserReq:
+            type: object
+            properties:
+                id:
+                    type: string
+        FollowUserReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        FollowUserReq:
+            type: object
+            properties:
+                id:
+                    type: string
+                followId:
+                    type: string
+        GetUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                gender:
+                    type: string
+                nickname:
+                    type: string
+                avater:
+                    type: string
+                bio:
+                    type: string
+                birthday:
+                    type: string
+                fansCount:
+                    type: string
+                followingCount:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ListFollowersReply:
+            type: object
+            properties:
+                followers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GetUserReply'
+        ListFollowingReply:
+            type: object
+            properties:
+                following:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GetUserReply'
+        LoginUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                token:
+                    type: string
+        LoginUserReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+                passwordHash:
+                    type: string
+        RegisterUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                token:
+                    type: string
+        RegisterUserReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+                passwordHash:
+                    type: string
+        SendVerificationCodeReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+            description: 发送验证码响应
+        SendVerificationCodeReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateUserReply:
+            type: object
+            properties:
+                message:
+                    type: string
+        UpdateUserReq:
+            type: object
+            properties:
+                id:
+                    type: string
+                phone:
+                    type: string
+                passwordHash:
+                    type: string
+                nickname:
+                    type: string
+                avatar:
+                    type: string
+                bio:
+                    type: string
+                gender:
+                    type: string
+                birthdate:
+                    type: string
+        VerifyCodeReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                token:
+                    type: string
+            description: 验证验证码响应
+        VerifyCodeReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+                code:
+                    type: string
+            description: 验证验证码请求
+tags:
+    - name: User

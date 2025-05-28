@@ -1,0 +1,28 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
+  redis:
+    addr: 127.0.0.1:6379
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+kafka:
+  brokers:
+    - "kafka-broker1:9092"
+    - "kafka-broker2:9092"
+  topics:
+    follow_event: "user_follow_events"
+    unfollow_event: "user_unfollow_events"
+  partition:
+    follow_event: 0
+    unfollow_event: 0
+  read_timeout: 0.2s
+  write_timeout: 0.2s
+    

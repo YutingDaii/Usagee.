@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package interaction; // Simpler package name
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "interaction/api/interaction;interaction"; // Module path based
+
+// Interaction Service definition
+service InteractionService { // Renamed to avoid conflict with package
+	// LikeVideo handles liking a video.
+	rpc LikeVideo(LikeVideoRequest) returns (LikeVideoReply) {
+		option (google.api.http) = {
+			post: "/interaction/video/like", // Simplified path
+			body: "*"
+		};
+	}
+	// UnlikeVideo handles unliking a video.
+	rpc UnlikeVideo(UnlikeVideoRequest) returns (UnlikeVideoReply) {
+		option (google.api.http) = {
+			post: "/interaction/video/unlike",
+			body: "*"
+		};
+	}
+	// GetVideoLikeCount handles getting the like count for a video.
+	rpc GetVideoLikeCount(GetVideoLikeCountRequest) returns (GetVideoLikeCountReply) {
+		option (google.api.http) = {
+			get: "/interaction/video/{video_id}/like_count"
+		};
+	}
+	// PostComment handles posting a comment on a video or replying to a comment.
+	rpc PostComment(PostCommentRequest) returns (PostCommentReply) {
+		option (google.api.http) = {
+			post: "/interaction/video/comment",
+			body: "*"
+		};
+	}
+	// ListComments handles listing comments for a video.
+	rpc ListComments(ListCommentsRequest) returns (ListCommentsReply) {
+		option (google.api.http) = {
+			get: "/interaction/video/{video_id}/comments"
+		};
+	}
+	// FavoriteVideo handles adding a video to favorites.
+	rpc FavoriteVideo(FavoriteVideoRequest) returns (FavoriteVideoReply) {
+		option (google.api.http) = {
+			post: "/interaction/video/favorite",
+			body: "*"
+		};
+	}
+	// UnfavoriteVideo handles removing a video from favorites.
+	rpc UnfavoriteVideo(UnfavoriteVideoRequest) returns (UnfavoriteVideoReply) {
+		option (google.api.http) = {
+			post: "/interaction/video/unfavorite",
+			body: "*"
+		};
+	}
+	// ListFavorites handles listing a user's favorite videos.
+	rpc ListFavorites(ListFavoritesRequest) returns (ListFavoritesReply) {
+		option (google.api.http) = {
+			get: "/interaction/user/{user_id}/favorites"
+		};
+	}
+}
+
+// LikeItem structure based on domain model
+message LikeItem {
+	int64 user_id = 1;
+	int64 video_id = 2;
+	google.protobuf.Timestamp liked_at = 3;
+}
+
+// CommentItem structure based on domain model
+message CommentItem {
+	int64 comment_id = 1;
+	int64 video_id = 2;
+	int64 user_id = 3;
+	string content = 4;
+	int64 parent_id = 5; // 0 for root comment
+	google.protobuf.Timestamp created_at = 6;
+	string path = 7; // Materialized path
+	repeated CommentItem replies = 8; // Nested replies for hierarchical display
+}
+
+// FavoriteItem structure based on domain model
+message FavoriteItem {
+	int64 user_id = 1;
+	int64 video_id = 2;
+	google.protobuf.Timestamp favorited_at = 3;
+}
+
+// Requests and Replies for Like/Unlike
+message LikeVideoRequest {
+	int64 user_id = 1;
+	int64 video_id = 2;
+}
+message LikeVideoReply {
+	bool success = 1;
+}
+
+message UnlikeVideoRequest {
+	int64 user_id = 1;
+	int64 video_id = 2;
+}
+message UnlikeVideoReply {
+	bool success = 1;
+}
+
+message GetVideoLikeCountRequest {
+	int64 video_id = 1;
+}
+message GetVideoLikeCountReply {
+	int64 like_count = 1;
+}
+
+// Requests and Replies for Comments
+message PostCommentRequest {
+	int64 video_id = 1;
+	int64 user_id = 2;
+	string content = 3;
+	int64 parent_id = 4; // 0 for root comment
+}
+message PostCommentReply {
+	CommentItem comment = 1;
+}
+
+message ListCommentsRequest {
+	int64 video_id = 1;
+	int32 page_num = 2; // Page number (e.g., 1-based)
+	int32 page_size = 3; // Number of comments per page
+	int64 root_comment_id = 4; // Optional: List replies for a specific root comment
+}
+message ListCommentsReply {
+	repeated CommentItem comments = 1;
+	int32 total_pages = 2; // Total number of pages
+	int64 total_comments = 3; // Total number of comments (for the video or root comment)
+}
+
+// Requests and Replies for Favorites
+message FavoriteVideoRequest {
+	int64 user_id = 1;
+	int64 video_id = 2;
+}
+message FavoriteVideoReply {
+	bool success = 1;
+}
+
+message UnfavoriteVideoRequest {
+	int64 user_id = 1;
+	int64 video_id = 2;
+}
+message UnfavoriteVideoReply {
+	bool success = 1;
+}
+
+message ListFavoritesRequest {
+	int64 user_id = 1;
+	int32 page_num = 2;
+	int32 page_size = 3;
+}
+message ListFavoritesReply {
+	repeated FavoriteItem favorites = 1;
+	int32 total_pages = 2;
+	int64 total_favorites = 3;
+}

@@ -1,0 +1,72 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "user/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Data {
+  message Database {
+    string driver = 1;
+    string source = 2;
+  }
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration dial_timeout = 3;
+    google.protobuf.Duration read_timeout = 4;
+    google.protobuf.Duration write_timeout = 5;
+  }
+
+  message Trace{
+    string endpoint = 1;
+  }
+  //kafka
+  message KafkaBroker {
+    string address = 1;
+  }
+  message KafkaTopics {
+    string follow_event = 1;
+    string unfollow_event = 2;
+  }
+  message KafkaPartitions {
+    int32 follow_event = 1;
+    int32 unfollow_event = 2;
+  }
+  
+  message Kafka {
+    repeated KafkaBroker brokers = 1;
+    KafkaTopics topics = 2;
+    KafkaPartitions partition = 3;
+    google.protobuf.Duration read_timeout = 4;
+    google.protobuf.Duration write_timeout = 5;
+  }
+
+  Database database = 1;
+  Redis redis = 2;
+  Trace trace = 3;
+  Kafka kafka = 4;
+  
+}
+
+

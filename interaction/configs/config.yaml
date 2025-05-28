@@ -1,0 +1,37 @@
+ server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+ data:
+  database:
+    driver: mysql
+    source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
+    vtgate_source: root:root@tcp(127.0.0.1:15991)/videoservice?parseTime=True&loc=Local
+  redis:
+    addresses:
+      - "redis-node1:6379"
+      - "redis-node2:6379"
+      - "redis-node3:6379"
+      - "redis-node4:6379"
+      - "redis-node5:6379"
+      - "redis-node6:6379"
+    password: "password"
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+  minio:
+    endpoint: play.min.io
+    access_key: minioadmin
+    secret_key: minioadmin
+    secure: false
+ trace:
+  name: usagee.service.video
+  id: usagee.id.video.1
+  version: 1.0.0
+  endpoint: localhost:4317
+  
+
+  
+  

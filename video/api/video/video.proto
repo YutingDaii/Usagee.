@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package video;
+
+option go_package = "api/video";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+// Video message represents a video entity
+message Video {
+    int64 id = 1;
+    int64 user_id = 2;
+    string title = 3;
+    string description = 4;
+    int32 duration = 5;
+    string url = 6;
+    string resolution = 7;
+    enum Visibility {
+        PUBLIC = 0;
+        PRIVATE = 1;
+    }
+    Visibility visibility = 8;
+    enum Status {
+        DRAFT = 0;
+        UPLOADING = 1;
+        PROCESSING = 2;
+        READY = 3;
+        PUBLISHED = 4;
+        UNPUBLISHED = 5;
+    }
+    Status status = 9;
+    google.protobuf.Timestamp created_at = 10;
+    google.protobuf.Timestamp updated_at = 11;
+}
+
+// VideoVariant represents a transcoded version of a video
+message VideoVariant {
+    int64 id = 1;
+    int64 video_id = 2;
+    string resolution = 3;
+    string url = 4;
+}
+
+// Request and response messages for Video service
+message CreateVideoRequest {
+    Video video = 1;
+}
+
+message VideoResponse {
+    Video video = 1;
+}
+
+message TranscodeVideoRequest {
+    int64 video_id = 1;
+}
+
+message TranscodeVideoResponse {
+    repeated VideoVariant variants = 1;
+}
+
+message GenerateThumbnailRequest {
+    int64 video_id = 1;
+}
+
+message GenerateThumbnailResponse {
+    string thumbnail_url = 1;
+}
+
+message GetVideoRequest {
+    int64 id = 1;
+}
+
+message DeleteVideoRequest {
+    int64 id = 1;
+}
+
+message DeleteVideoResponse {}
+
+message GetVideoByUserIDRequest {
+    int64 user_id = 1;
+}
+
+message VideoListResponse {
+    repeated Video videos = 1;
+}
+
+// Video service definition
+service VideoService {
+    // Create a new video (metadata)
+    rpc CreateVideo(CreateVideoRequest) returns (VideoResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/videos"
+            body: "*"
+        };
+    }
+    
+    // Transcode a video
+    rpc TranscodeVideo(TranscodeVideoRequest) returns (TranscodeVideoResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/videos/{video_id}/transcode"
+            body: "*"
+        };
+    }
+    
+    // Generate thumbnail for a video
+    rpc GenerateThumbnail(GenerateThumbnailRequest) returns (GenerateThumbnailResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/videos/{video_id}/thumbnail"
+            body: "*"
+        };
+    }
+    
+    // Get a video by ID
+    rpc GetVideo(GetVideoRequest) returns (VideoResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/videos/{id}"
+        };
+    }
+    
+    // Delete a video
+    rpc DeleteVideo(DeleteVideoRequest) returns (DeleteVideoResponse) {
+        option (google.api.http) = {
+            delete: "/api/v1/videos/{id}"
+        };
+    }
+    
+    // Get videos by user ID
+    rpc GetVideoByUserID(GetVideoByUserIDRequest) returns (VideoListResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/users/{user_id}/videos"
+        };
+    }
+}
+

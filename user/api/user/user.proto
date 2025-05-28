@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package api.user;
+
+import "google/api/annotations.proto";
+
+
+
+
+option go_package = "api/user;user";
+
+service User {
+    // Send verification code
+    rpc SendVerificationCode (SendVerificationCodeReq) returns (SendVerificationCodeReply) {
+        option (google.api.http) = {
+            post: "/api/users/send_verification_code"
+            body: "*"
+        };
+    }
+
+    // Verify code
+    rpc VerifyCode (VerifyCodeReq) returns (VerifyCodeReply) {
+        option (google.api.http) = {
+            post: "/api/users/verify_code"
+            body: "*"
+        };
+    }
+    
+    // Register
+    rpc Register (RegisterUserReq) returns (RegisterUserReply) {
+        option (google.api.http) = {
+            post: "/api/users/register"
+            body: "*"
+        };
+    }
+    
+    // Login
+    rpc Login (LoginUserReq) returns (LoginUserReply) {
+        option (google.api.http) = {
+            post: "/api/users/login"
+            body: "*"
+        };
+    }
+
+    rpc UpdateUser (UpdateUserReq) returns (UpdateUserReply) {
+        option (google.api.http) = {
+            post: "/api/users/{id}/edit"
+            body: "*"
+        };
+    }
+    
+    rpc DeleteUser (DeleteUserReq) returns (DeleteUserReply) {
+        option (google.api.http) = {
+            post: "/api/users/{id}/del"
+            body: "*"
+        };
+    }
+    
+    rpc GetUser (GetUserReq) returns (GetUserReply) {
+        option (google.api.http) = {
+            get: "/api/users/{id}/profile"
+        };
+    }
+    
+    rpc ListFollowers (ListFollowersReq) returns (ListFollowersReply) {
+        option (google.api.http) = {
+            get: "/api/users/{id}/followers"
+        };
+    }
+    
+    rpc ListFollowing (ListFollowingReq) returns (ListFollowingReply) {
+        option (google.api.http) = {
+            get: "/api/users/{id}/following"
+        };
+    }
+    
+    rpc FollowUser (FollowUserReq) returns (FollowUserReply) {
+        option (google.api.http) = {
+            post: "/api/users/{id}/follow"
+            body: "*"
+        };
+    }
+}
+
+message SendVerificationCodeReq {
+    string phone = 1; // 手机号
+}
+
+// 发送验证码响应
+message SendVerificationCodeReply {
+    bool success = 1; 
+}
+
+// 验证验证码请求
+message VerifyCodeReq {
+    string phone = 1; // 手机号
+    string code = 2; // 验证码
+}
+
+// 验证验证码响应
+message VerifyCodeReply {
+    bool success = 1; // 验证是否成功
+    string token = 2; // 令牌
+}
+
+message RegisterUserReq {
+    string phone = 1;
+    string password_hash = 2;
+}
+message RegisterUserReply {
+    int64 id = 1;
+    string token = 2;
+}
+
+message LoginUserReq {
+    string phone = 1;
+    string password_hash = 2;
+}
+message LoginUserReply {
+    int64 id = 1;
+    string token = 2;
+}
+
+message UpdateUserReq {
+    int64  id = 1; // 用户ID
+    string phone = 2; // 手机号
+    string password_hash = 3;
+    string nickname = 4; // 昵称
+    string avatar = 5; // 头像URL
+    string bio = 6; // 个人简介
+    string gender = 7; // 性别: UNKNOWN, MALE, FEMALE
+    string birthdate = 8;
+}
+message UpdateUserReply {
+    string message = 1;
+}
+
+message DeleteUserReq {
+    int64 id = 1; // 用户ID
+}
+message DeleteUserReply {
+    string message = 1;
+}
+
+message GetUserReq {
+    int64 id = 1; // 用户ID
+}
+message GetUserReply {
+    int64  id = 1;
+    string gender = 2;
+    string nickname = 3;
+    string avater = 4;
+    string bio = 5;
+    string birthday = 6;
+    int64 fans_count = 7;
+    int64 following_count = 8;
+}
+
+message ListFollowersReq {
+    int64 id = 1;
+
+}
+message ListFollowersReply {
+    repeated GetUserReply followers = 1; // 粉丝列表
+}
+
+message ListFollowingReq {
+    int64 id = 1;
+    
+}
+message ListFollowingReply {
+    repeated GetUserReply following = 1; // 关注列表
+}
+
+message FollowUserReq {
+    int64 id = 1;
+    int64 follow_id = 2;
+}
+message FollowUserReply {
+    string message = 1;
+}
